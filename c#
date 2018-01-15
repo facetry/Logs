@@ -1,0 +1,20 @@
+ 1.这则表达式
+ string formatString = "{AID}{Seq}{CCYY}";
+            //}{， }-{， }/{，}.{，} {
+            string[] resultString = Regex.Split(formatString, "}[\\/\\-\\.\\s]?{");
+            foreach (string str in resultString)
+            {
+                Console.WriteLine(str);
+            }
+            Console.ReadLine();
+  2. 复合格式字符串
+            string sequence = Console.ReadLine();//5
+            string sequenceNumberOfDigits = "5";
+            string SeqFormat = "{0:D" + sequenceNumberOfDigits + "}"; ;
+            int number = 0;
+            if (int.TryParse(sequence, NumberStyles.Any, CultureInfo.InvariantCulture, out number))
+            {
+               sequence = string.Format(CultureInfo.InvariantCulture, SeqFormat, number);//00005
+            }
+            Console.WriteLine("Sequence: " + sequence);
+            http://cache.baiducontent.com/c?m=9d78d513d9d431a54f9d92697d65c0176d4381132ba7da020bd78439e0732b37506793ac51270772d7d20c6216db394beb802102311453c08f8fc814d2e1d46e6d9f26476d01d61f4f860eafbc1764977c875a9ef34ea1a7a561cee58f8f8a1e0896061829c0b6d00b5e43d739a75262b8f8d85515551bbcee3461&p=977dc64ad49f11a05bec922617078f&newp=8b2a970d86cc42ae5efe8f2155059d231610db2151d6d7126b82c825d7331b001c3bbfb42325120fd5cf7d6606aa4e57e8f735793d012ba3dda5c91d9fb4c57479c0&user=baidu&fm=sc&query=%B8%B4%BA%CF%B8%F1%CA%BD%D7%D6%B7%FB%B4%AE&qid=cd2db3120000d4cb&p1=1
