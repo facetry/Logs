@@ -1,0 +1,61 @@
+1 case..... when
+IF(	(SELECT Count(*) FROM PR_ConfigParameter c
+		LEFT JOIN (PR_Entity_ConfigParameter ec 
+			LEFT JOIN PR_ConfigEntity ce 
+			ON (ec.ConfigEntityKey = ce.ConfigEntityKey AND ce.ConfigEntityTypeKey = 2))
+		ON (c.ParameterKey = ec.ParameterKey)
+	WHERE c.ParameterName = @ParameterName AND ce.EntityKey = @EntityKey) > 0)
+
+	BEGIN
+		SELECT
+			ParameterValue = 
+				CASE 
+					--Current Value Exists for Agency for this Property
+					WHEN (ec.CurrentValue is not NULL 
+						AND	ec.IsActive = 1)
+						THEN ec.CurrentValue
+                    --Agency Default Value for this Property
+                    WHEN ec.DefaultValue is not NULL 
+						THEN ec.DefaultValue
+					ELSE
+						c.DefaultValue
+				END
+		FROM PR_ConfigParameter c
+			LEFT JOIN (PR_Entity_ConfigParameter ec 
+				LEFT JOIN PR_ConfigEntity ce 
+				ON (ec.ConfigEntityKey = ce.ConfigEntityKey AND ce.ConfigEntityTypeKey = 2))
+			ON (c.ParameterKey = ec.ParameterKey)
+		WHERE c.ParameterName = @ParameterName AND ce.EntityKey = @EntityKey
+	END
+
+ELSE
+	BEGIN
+		SELECT
+           ParameterValue = c.DefaultValue
+		FROM PR_ConfigParameter c
+		WHERE c.ParameterName = @ParameterName
+	END
+  
+  2. insert into ...select
+  USE UnifiedCAD
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PR]'))
+BEGIN
+	IF NOT EXISTS(SELECT 1 FROM [PR] WHERE [ParameterName]=N'IncidentNumberDisplayIncidentSequenceMinimumNumberOfDigits')
+	BEGIN 
+  INSERT INTO PR_Entity_ConfigParameter 
+		SELECT
+             PR_ConfigEntity.ConfigEntityKey AS [ConfigEntityKey]
+            ,PR_ConfigParameter.ParameterKey AS [ParameterKey]
+            ,PR_ConfigParameter.DefaultValue AS [DefaultValue]
+            ,'8' AS [CurrentValue]
+            ,'1' AS [RangeMin]
+            ,'8' AS [RangeMax]
+            ,PR_ConfigParameter.Modulekey AS [ModuleKey]
+            ,1 AS [IsActive]
+            ,GETDATE() AS [InsertedTimestamp]
+            ,GETDATE() AS [UpdatedTimestamp]
+		FROM 
+            PR_ConfigEntity 
+            INNER JOIN 
+			PR_ConfigParameter 
