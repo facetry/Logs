@@ -59,3 +59,9 @@ BEGIN
             PR_CE
             INNER JOIN 
 			PR_CP 
+3. sql server->tool->sql server profiler->连接数据库->Trace properties->events selections
+-->只勾选stored procedures下面的框，变黑表示所有的都选中了， 其他的全部去掉勾，
+--》选中show all columns ->organize columns-> objectName-->ok
+-->column filter--> objectName-->like-->%sp name%-->ok
+在cad上执行操作。就可以捕获到从cad传过来的去执行sp的参数
+4. 查看sql server 的sp的performence问题，使用sql server->打开一个sp->include actual Execution paln(CTRL + M) 运行
