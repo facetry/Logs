@@ -41,21 +41,21 @@ ELSE
 
 IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PR]'))
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM [PR] WHERE [ParameterName]=N'IncidentNumberDisplayIncidentSequenceMinimumNumberOfDigits')
+	IF NOT EXISTS(SELECT 1 FROM [PR] WHERE [ParameterName]=N'IDigits')
 	BEGIN 
   INSERT INTO PR_Entity_ConfigParameter 
 		SELECT
-             PR_ConfigEntity.ConfigEntityKey AS [ConfigEntityKey]
-            ,PR_ConfigParameter.ParameterKey AS [ParameterKey]
-            ,PR_ConfigParameter.DefaultValue AS [DefaultValue]
+             PR_CE.ConfigEntityKey AS [ConfigEntityKey]
+            ,PR_CD.ParameterKey AS [ParameterKey]
+            ,PR_CP.DefaultValue AS [DefaultValue]
             ,'8' AS [CurrentValue]
             ,'1' AS [RangeMin]
             ,'8' AS [RangeMax]
-            ,PR_ConfigParameter.Modulekey AS [ModuleKey]
+            ,PR_CP.Modulekey AS [ModuleKey]
             ,1 AS [IsActive]
             ,GETDATE() AS [InsertedTimestamp]
             ,GETDATE() AS [UpdatedTimestamp]
 		FROM 
-            PR_ConfigEntity 
+            PR_CE
             INNER JOIN 
-			PR_ConfigParameter 
+			PR_CP 
