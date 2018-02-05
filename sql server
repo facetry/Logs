@@ -1,7 +1,7 @@
 1 case..... when
-IF(	(SELECT Count(*) FROM PR_ConfigParameter c
-		LEFT JOIN (PR_Entity_ConfigParameter ec 
-			LEFT JOIN PR_ConfigEntity ce 
+IF(	(SELECT Count(*) FROM table1 c
+		LEFT JOIN (table2 ec 
+			LEFT JOIN table3 ce 
 			ON (ec.ConfigEntityKey = ce.ConfigEntityKey AND ce.ConfigEntityTypeKey = 2))
 		ON (c.ParameterKey = ec.ParameterKey)
 	WHERE c.ParameterName = @ParameterName AND ce.EntityKey = @EntityKey) > 0)
@@ -20,9 +20,9 @@ IF(	(SELECT Count(*) FROM PR_ConfigParameter c
 					ELSE
 						c.DefaultValue
 				END
-		FROM PR_ConfigParameter c
-			LEFT JOIN (PR_Entity_ConfigParameter ec 
-				LEFT JOIN PR_ConfigEntity ce 
+		FROM table1 c
+			LEFT JOIN (table2 ec 
+				LEFT JOIN table3 ce 
 				ON (ec.ConfigEntityKey = ce.ConfigEntityKey AND ce.ConfigEntityTypeKey = 2))
 			ON (c.ParameterKey = ec.ParameterKey)
 		WHERE c.ParameterName = @ParameterName AND ce.EntityKey = @EntityKey
@@ -32,7 +32,7 @@ ELSE
 	BEGIN
 		SELECT
            ParameterValue = c.DefaultValue
-		FROM PR_ConfigParameter c
+		FROM table1 c
 		WHERE c.ParameterName = @ParameterName
 	END
   
